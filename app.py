@@ -95,12 +95,14 @@ def send_wa_message(to_phone, text_body):
 
 @app.route('/webhook', methods=['GET'])
 def webhook_verification():
-    """ Meta developer webhook verification handshake link """
+    """ Baseline direct echo verification route for Meta Developer handshakes """
     verify_token = os.environ.get("WEBHOOK_VERIFY_TOKEN", "efixnow_secret_token")
     mode = request.args.get('hub.mode')
     token = request.args.get('hub.verify_token')
     challenge = request.args.get('hub.challenge')
-    
+     if challenge:
+        return str(challenge), 200
+    return 'Verification Gate Active', 200
     if mode and token:
         if mode == 'subscribe' and token == verify_token:
             return challenge, 200
